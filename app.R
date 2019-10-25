@@ -6,22 +6,24 @@ ui<-fluidPage(
   sidebarLayout(
     sidebarPanel(
       selectInput(inputId="plate",label="Choose plate to show",
-        choices=c("Plate 1 (demo plate)","Plate 2"),selected="Plate 2"),
+        choices=c("Plate 1 (demo plate)","Plate 2","Plate 9"),selected="Plate 9"),
       sliderInput(inputId="transparency",label="Percent transparency (100% to reveal hidden pattern)",
-        min=0,max=100,value=0),
+        min=0,max=100,value=0,ticks=FALSE),
       textInput(inputId="value",label="What value do you see?",
         value=""),
       h4("Instructions:\n"),
       p("Change transparency level to reveal the pattern 
         that should be visible if you have normal color vision.\n\n"),
+      strong("For best usage, reset transparency level before changing plates.\n\n"),
       h4("Details:\n"),
       p("Prototype web application for the ishihara R package 
-        (Revell, 2019).")
+        (Revell & Revell, 2019)."),
+      width=3
     ),
     mainPanel(
-      plotOutput("plot",width="700px",height="700px")
+      plotOutput("plot",width="650px",height="650px")
     ),
-  fluid=TRUE, position="left")
+  position="left")
 )
 
 server <- function(input, output, session) {
@@ -39,10 +41,12 @@ server <- function(input, output, session) {
         data(plate2)
         plate<-plate2
 
+    } else if(input$plate=="Plate 9"){
+        data(plate9)
+        plate<-plate9
     }
     plot(plate,alpha=1-input$transparency/100,
          mar=rep(0.1,4))
-    box()
   })
 }
 
